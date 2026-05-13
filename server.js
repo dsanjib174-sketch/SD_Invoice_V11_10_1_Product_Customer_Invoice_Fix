@@ -12,7 +12,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'sd_invoice_v11_stable_secret';
-const db = new Database('sd_invoice_v11_10_1_product_customer_invoice_fix.db');
+const db = new Database('sd_invoice_v11_10_2_product_save_hotfix.db');
 
 app.use(helmet({ contentSecurityPolicy:false }));
 app.use(cors());
@@ -297,6 +297,8 @@ function seed(){
   }
 }
 seed();
+try{db.prepare("ALTER TABLE products ADD COLUMN unit TEXT DEFAULT 'Nos'").run()}catch(e){}
+try{db.prepare("ALTER TABLE products ADD COLUMN description TEXT").run()}catch(e){}
 
 try{db.prepare("CREATE TABLE IF NOT EXISTS super_branding(id INTEGER PRIMARY KEY CHECK(id=1),platform_name TEXT,logo_data TEXT,footer_text TEXT,footer_enabled_default INTEGER DEFAULT 1)").run()}catch(e){}
 try{db.prepare("INSERT OR IGNORE INTO super_branding(id,platform_name,footer_text,footer_enabled_default) VALUES(1,'SD Invoice','This invoice generated from SD Invoice portal.',1)").run()}catch(e){}
@@ -933,4 +935,4 @@ app.get('/api/login-history',auth,(req,res)=>{
 
 app.get('/api/audit',auth,(req,res)=>res.json(db.prepare("SELECT * FROM audit_logs ORDER BY id DESC LIMIT 200").all()));
 app.get('*',(req,res)=>res.sendFile(path.join(__dirname,'public','index.html')));
-app.listen(PORT,()=>console.log('SD Invoice V11.10.1 Product Customer Invoice Fix'+PORT));
+app.listen(PORT,()=>console.log('SD Invoice V11.10.2 Product Save Hotfix'+PORT));
