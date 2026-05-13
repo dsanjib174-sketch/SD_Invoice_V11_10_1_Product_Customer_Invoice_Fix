@@ -1,6 +1,6 @@
 {
-  "name": "sd-invoice-v11-10-1-product-customer-invoice-fix",
-  "version": "11.10.1-product-customer-invoice-fix",
+  "name": "sd-invoice-v11-10-2-product-save-hotfix",
+  "version": "11.10.2-product-save-hotfix",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
